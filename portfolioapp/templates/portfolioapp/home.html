@@ -1,0 +1,24 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home Page</title>
+</head>
+<body>
+<img src="{% static 'portfolioapp/Profile.jpg' %}" width="500" height="600">
+<a href="{% static 'portfolioapp/Saikiran_Resume.pdf' %}">My Resume</a>
+<br>
+{% for blog in All_Blogs %}
+    <a href="{% url 'blogs:detail_blog' blog.id %}"><h1>{{ blog.blog_title }}</h1></a>
+    <p>{{ blog.blog_description }}</p>
+    - <i>{{ blog.blog_author }}</i>
+    <br>
+    <u>{{ blog.blog_date }}</u>
+    <br>
+    <img src="{{ blog.blog_image.url }}" height="100" width="100">
+    {% if blog.blog_url %}
+    <a href="{{ blog.blog_url }}">Link</a>
+{% endif %}
+{% endfor %}
+</body>
+</html>
