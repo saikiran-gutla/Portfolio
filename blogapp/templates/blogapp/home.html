@@ -1,3 +1,18 @@
+{% extends 'portfolioapp/base.html' %}
+{% block content %}
+<h2> Written {{ All_Blogs.count }} blog{{ All_Blogs.count|pluralize }}</h2>
 {% load static %}
-Blog app home
-<img src="{% static 'portfolioapp/Profile.jpg' %}">
+<div class="card-deck">
+    {% for blog in All_Blogs %}
+    <div class="card">
+        <img class="card-img-top" src="{{ blog.blog_image.url }}" alt="Card image cap">
+        <div class="card-body">
+            <a class="card-title" href="{% url 'blogs:detail_blog' blog.id %}"><h1>{{ blog.blog_title }}</h1></a>
+            <p class="card-text">{{ blog.blog_description|truncatechars:150 }}</p>
+            <p class="card-text"><small class="text-muted">Last Updated On {{ blog.blog_date|date:'F jS Y'|lower }}</small></p>
+            <a href="{% url 'blogs:detail_blog' blog.id %}" class="btn btn-primary">Read More</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -4,7 +4,8 @@ from .models import Blogs
 
 # Create your views here.
 def home(request):
-    return render(request, 'blogapp/home.html')
+    blogs_data = Blogs.objects.all()
+    return render(request, 'blogapp/home.html', context={'All_Blogs': blogs_data})
 
 
 def detail_blog(request, blog_id):

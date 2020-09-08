@@ -9,5 +9,6 @@ class Blogs(models.Model):
     blog_date = models.DateTimeField(auto_now=True)
     blog_image = models.ImageField(upload_to="blogapp/images")
     blog_url = models.URLField(blank=True)
-    # class Meta:
 
+    def __str__(self):
+        return self.blog_title
