@@ -32,6 +32,12 @@
                 <a href="{% static 'portfolioapp/Saikiran_Resume.pdf' %}" class="nav-link">My Resume</a>
 
             </li>
+            <li class="nav-item">
+                <a href="{% url 'login' %}" class="nav-link">Login</a>
+            </li>
+            <li class="nav-item">
+                <a href="{% url 'register' %}" class="nav-link">Signup</a>
+            </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">
@@ -48,7 +54,7 @@
             <li class="nav-item">
                 <!--        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>-->
                 <a href="{% url 'blogs:home' %}" class="nav-link" tabindex="-1"><span class="badge badge-light">{{ All_Blogs.count }}blog{{ All_Blogs.count|pluralize }}</span>
-                  </a>
+                </a>
 
             </li>
         </ul>
