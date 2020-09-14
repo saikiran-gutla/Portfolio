@@ -26,11 +26,24 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
+            {% if user.is_authenticated %}
+            <li class="nav-item active">
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">Create Blog</a>
+            </li>
+            <li class="nav-item">
+                <!--        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>-->
+                <a href="{% url 'blogs:home' %}" class="nav-link" tabindex="-1"><span
+                        class="badge badge-light">My Blogs</span>
+                </a>
+
+            </li>
+            {% else %}
             <li class="nav-item active">
             </li>
             <li class="nav-item">
                 <a href="{% static 'portfolioapp/Saikiran_Resume.pdf' %}" class="nav-link">My Resume</a>
-
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
@@ -42,17 +55,35 @@
                        target="_blank">LinkedIn</a>
                     <a class="dropdown-item" href="https://github.com/saikiran-gutla/" target="_blank">GitHub</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Something else here</a>
                 </div>
             </li>
             <li class="nav-item">
                 <!--        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>-->
                 <a href="{% url 'blogs:home' %}" class="nav-link" tabindex="-1"><span class="badge badge-light">{{ All_Blogs.count }}blog{{ All_Blogs.count|pluralize }}</span>
-                  </a>
+                </a>
 
             </li>
+            {% endif %}
         </ul>
         <form class="form-inline my-2 my-lg-0">
+            {% if user.is_authenticated %}
+            <!--            <ul>-->
+            <!--                <li>Hello, {{ user }} &nbsp;</li>-->
+            <!--                <li><a class="btn btn-outline-success my-2 my-sm-0 mr-sm-2" href="{% url 'logout' %}">Logout</a></li>-->
+            <!--            </ul>-->
+            <div class="dropdown mr-1">
+                <button type="button" class="btn btn-secondary dropdown-toggle" id="dropdownMenuOffset"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-offset="10,20">
+                    Hello, {{ user }} &nbsp;
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuOffset">
+                <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                </div>
+            </div>
+            {% else %}
+            <a class="btn btn-outline-success my-2 my-sm-0 mr-sm-2" href="{% url 'login' %}">Login</a>
+            <a class="btn btn-outline-success my-2 my-sm-0 mr-sm-2" href="{% url 'signup' %}">Signup</a>
+            {% endif %}
             <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form>

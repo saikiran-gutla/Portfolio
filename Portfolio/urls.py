@@ -17,11 +17,15 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
-from portfolioapp.views import home
+from portfolioapp.views import home, login_user, signup, logout, logout_user
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home, name='home'),
-    path('blog/', include('blogapp.urls'))
+    path('login', login_user, name='login'),
+    path('logout', logout_user, name='logout'),
+    path('signup', signup, name='signup'),
+    path('blog/', include('blogapp.urls')),
+    path('portfolio/', include('portfolioapp.urls')),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
