@@ -1,14 +1,18 @@
+import os
+
 from django.contrib import messages
 from django.contrib.auth import logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, auth
-from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect, HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
 
 from blogapp.models import Blogs
+from django.core.files.storage import FileSystemStorage
 
 # Create your views here.
 from portfolioapp.decorators import is_user_unauthenticated
+from portfolioapp.models import BloggerBlogs
 
 
 def home(request):
@@ -81,6 +85,50 @@ def signup(request):
 @login_required(login_url='login')
 def blogger_homepage(request):
     return render(request, 'portfolioapp/blogger_homepage.html', {})
+
+
+@login_required(login_url='login')
+def write_blog(request):
+    if request.method == "POST" and request.FILES['blog_image']:
+        blog_title_name = request.POST.get('title_name')
+        blog_image = request.POST.get('blog_image')
+        blog_description = request.POST.get('blog_description')
+        author_name = request.POST.get('blogger_name')
+        print(f"Blog Title name : {blog_title_name}")
+        print(f"Blog Image : {blog_image}")
+        print(f"Blog Description : {blog_description}")
+        print(f"Blog Author : {author_name}")
+        myfile = request.FILES['blog_image']
+        fs = FileSystemStorage()
+        filename = fs.save(myfile.name, myfile)
+        print(f"FIle Nae : {filename}")
+        # uploaded_file_url = fs.url(filename)
+        # print(f"File Url : {uploaded_file_url}")
+        blog_usr = User.objects.get(username=author_name)
+        print(f"blog user : {blog_usr}")
+        blog = BloggerBlogs(blog_title=blog_title_name, blog_description=blog_description,
+                            blog_image=filename)
+        blog.blog_profile_name = blog_usr
+        print(f"Before saving {blog}")
+        blog.save()
+        print(f"After saving {blog}")
+        return render(request, 'blogapp/home.html', {
+            'uploaded_file_url': filename})
+    else:
+        return render(request, 'portfolioapp/create_blog.html', {})
+
+
+@login_required(login_url='login')
+def user_blogs(request):
+    if request.method == "GET":
+        blog_data = BloggerBlogs.objects.filter(blog_profile_name=request.user)
+        # blog_data = get_object_or_404(BloggerBlogs, blog_profile_name=user_name)
+        return render(request, 'blogapp/home.html', context={'All_Blogs': blog_data})
+
+
+def user_detail_blog(request, blog_id):
+    blog_data = get_object_or_404(BloggerBlogs, pk=blog_id)
+    return render(request, 'blogapp/blog_detail.html', context={'blog': blog_data})
 
 
 def logout_user(request):
