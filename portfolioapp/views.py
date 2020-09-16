@@ -1,12 +1,10 @@
 import os
-
 from django.contrib import messages
 from django.contrib.auth import logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, auth
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-
 from blogapp.models import Blogs
 from django.core.files.storage import FileSystemStorage
 
@@ -16,7 +14,7 @@ from portfolioapp.models import BloggerBlogs
 
 
 def home(request):
-    all_blogs = Blogs.objects.all()
+    all_blogs = BloggerBlogs.objects.all()
     return render(request, 'portfolioapp/home.html', {'All_Blogs': all_blogs})
 
 
@@ -116,6 +114,43 @@ def write_blog(request):
             'uploaded_file_url': filename})
     else:
         return render(request, 'portfolioapp/create_blog.html', {})
+
+
+@login_required(login_url='login')
+def update_blog(request, blog_id):
+    if request.method == "POST":
+        blog_title_name = request.POST.get('title_name')
+        blog_image = request.POST.get('blog_image')
+        blog_description = request.POST.get('blog_description')
+        author_name = request.POST.get('blogger_name')
+        filename = ""
+        print(f"Blog Title name : {blog_title_name}")
+        print(f"Blog Image : {blog_image}")
+        print(f"Blog Description : {blog_description}")
+        print(f"Blog Author : {author_name}")
+        blog_usr = User.objects.get(username=author_name)
+        print(f"blog user : {blog_usr}")
+        blog = BloggerBlogs.objects.get(pk=blog_id)
+        blog.blog_title = blog_title_name
+        blog.blog_profile_name = blog_usr
+
+        if blog_description is not None:
+            blog.blog_description = blog_description
+        if blog_image != "":
+            myfile = request.FILES['blog_image']
+            fs = FileSystemStorage()
+            filename = fs.save(myfile.name, myfile)
+            blog.blog_image = filename
+            print(f"FIle Nae : {filename}")
+
+        print(f"Before saving {blog}")
+        blog.save()
+        print(f"After saving {blog}")
+        messages.success(request, "Blog Updated Successfully")
+        return render(request, 'blogapp/home.html', {
+            'uploaded_file_url': filename})
+    else:
+        return render(request, 'blogapp/edit_blog.html', {})
 
 
 @login_required(login_url='login')

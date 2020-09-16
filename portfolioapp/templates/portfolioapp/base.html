@@ -6,7 +6,6 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
           integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
@@ -27,18 +26,30 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             {% if user.is_authenticated %}
-            <li class="nav-item active">
-            </li>
-            <li class="nav-item">
-                <a href="{% url 'write_blog' %}" class="nav-link">Create Blog</a>
-            </li>
-            <li class="nav-item">
-                <!--        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>-->
-                <a href="{% url 'user_blogs' %}" class="nav-link" tabindex="-1"><span
-                        class="badge badge-light">{{ All_Blogs.count }}blog{{ All_Blogs.count|pluralize }}</span>
-                </a>
+            <ul class="nav nav-tabs">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="{% url 'user_blogs' %}" role="button"
+                       aria-haspopup="true" aria-expanded="false">My blogs</a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="{% url 'user_blogs' %}">My blog{{ All_Blogs.count|pluralize }} {{ All_Blogs.count }}</a>
+                        <a class="dropdown-item" href="{% url 'write_blog' %}">Create Blog</a>
+                    </div>
+                </li>
+            </ul>
+<!--            <div class="dropdown">-->
+<!--                <a class="btn btn-secondary dropdown-toggle" href="{% url 'user_blogs' %}" role="button"-->
+<!--                   id="dropdownMenuLink"-->
+<!--                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
+<!--                    My blogs-->
+<!--                </a>-->
 
-            </li>
+<!--                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">-->
+<!--                    <a href="{% url 'user_blogs' %}" class="nav-link">My blog{{ All_Blogs.count|pluralize }} {{-->
+<!--                        All_Blogs.count }}</a>-->
+<!--                    <a href="{% url 'write_blog' %}" class="nav-link">Create Blog</a>-->
+<!--                </div>-->
+<!--            </div>-->
+
             {% else %}
             <li class="nav-item active">
             </li>
@@ -58,10 +69,8 @@
                 </div>
             </li>
             <li class="nav-item">
-                <!--        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>-->
                 <a href="{% url 'blogs:home' %}" class="nav-link" tabindex="-1"><span class="badge badge-light">{{ All_Blogs.count }}blog{{ All_Blogs.count|pluralize }}</span>
                 </a>
-
             </li>
             {% endif %}
         </ul>
@@ -73,7 +82,7 @@
                     Hello, {{ user }} &nbsp;
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuOffset">
-                <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                    <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
                 </div>
             </div>
             {% else %}

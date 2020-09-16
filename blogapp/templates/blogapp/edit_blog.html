@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Write Blog</title>
+    <title>Edit Blog</title>
     <script src="https://cdn.tiny.cloud/1/zf1xtwf4av6b7w4d3z7daol5112dn629z3ws4sp6nomzytlt/tinymce/5/tinymce.min.js"
             referrerpolicy="origin"></script>
     <script>tinymce.init({selector:'textarea'});</script>
@@ -18,7 +18,7 @@
                     <!-- Background image for card set in CSS! -->
                 </div>
                 <div class="card-body">
-                    <h5 class="card-title text-center">Write Your Blog</h5>
+                    <h5 class="card-title text-center">Edit Your Blog</h5>
                     {% for message in messages %}
                     <script>
                         alert("{{ message }}");
@@ -26,27 +26,39 @@
                     </script>
                     {% endfor %}
                     <form class="form-signin" enctype="multipart/form-data" method="POST"
-                          action="{{ request.build_absolute_uri }}">
+                          action="{% url 'update_blog' blog.id %}">
                         {% csrf_token %}
                         <div class="form-label-group">
                             <input type="text" id="title_name" name="title_name" placeholder="Title Name"
                                    class="form-control"
                                    required
-                                   autofocus><br>
+                                   disabled value="{{ blog.blog_title }}"><br>
                         </div>
 
                         <div class="form-group">
                             <label for="exampleFormControlFile1">Blog Image</label>
-                            <input type="file" class="form-control-file" name="blog_image" id="exampleFormControlFile1">
+                            <a href="{{ blog.blog_image.url }}">{{ blog.blog_image.url }}</a>
+                            <input type="file" class="form-control-file" name="blog_image" id="exampleFormControlFile1"
+                                   disabled value="{{ blog.blog_image.url }}">
                         </div>
-                        <textarea id="default" name="blog_description">Hello, World!</textarea>
+                        <textarea id="default" name="blog_description" disabled>{{ blog.blog_description }}</textarea>
                         <div class="form-group">
                             <label for="disabledTextInput">Blogger Name</label>
                             <input type="text" id="disabledTextInput" name="blogger_name" class="form-control"
                                    placeholder="input" value="{{ user }}" disabled>
                         </div>
-                        <input class="btn btn-lg btn-primary btn-block text-uppercase" type="submit"
-                               value="Save Blog" onclick="enable()">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-6 col-sm-6"><input
+                                        class="btn btn-lg btn-danger btn-block text-uppercase"
+                                        type="button"
+                                        value="Edit Blog" onclick="enableboxes()"></div>
+                                <div class="col-6 col-sm-6"><input
+                                        class="btn btn-lg btn-primary btn-block text-uppercase"
+                                        type="submit"
+                                        value="Save Blog" onclick="enable()"></div>
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -57,6 +69,18 @@
     function enable() {
 document.getElementById("disabledTextInput").disabled = false;
 }
+
+
+    function enableboxes() {
+document.getElementById("title_name").disabled = false;
+document.getElementById("exampleFormControlFile1").disabled = false;
+}
+
+
+
+
+
+
 </script>
 </body>
 </html>
