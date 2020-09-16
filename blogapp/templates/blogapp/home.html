@@ -11,8 +11,7 @@
 <div class="container">
     <div class="row">
         {% for blog in All_Blogs %}
-
-        <div class="col-6 col-sm-3">
+        <div class="col-md-6 col-sm-3">
             <img class="card-img-top" src="{{ blog.blog_image.url }}" alt="Card image cap">
             <div class="card-body">
                 <!--            <a class="card-title" href="{% url 'blogs:detail_blog' blog.id %}"><h1>{{ blog.blog_title }}</h1></a>-->
